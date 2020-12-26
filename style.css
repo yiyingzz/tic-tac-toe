@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
+
+:root {
+  --pale-blue: #ddecf2;
+  --blue: #1a85b0;
+  --dark-blue: #0667a3;
+  --yellow: #f8e69e;
+  --pink: #fdd1e2;
+}
+
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-color: var(--dark-blue);
+  font-family: "Fredoka One", cursive;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  color: var(--pale-blue);
+  text-align: center;
+}
+
+h1 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: var(--yellow);
+  text-transform: lowercase;
+  font-size: 4rem;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(50px, 1fr));
+  grid-template-rows: repeat(3, minmax(50px, 1fr));
+  grid-gap: 15px;
+  padding: 15px;
+  margin: 0 auto;
+  max-width: 65vh;
+  max-height: 65vh;
+  font-size: 7rem;
+}
+
+.board::before {
+  content: "";
+  padding-bottom: 100%;
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.board div:first-of-type {
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.board div {
+  padding: 8px;
+  border-radius: 5px;
+  background-color: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board .selected {
+  color: var(--pink);
+  /* background-color: var(--yellow); */
+}
+
+button {
+  margin-top: 10px;
+  background-color: transparent;
+  border: 0;
+  color: var(--pink);
+  font-size: 5rem;
+  transform: rotate(-45deg);
+}
+
+@media (max-width: 500px) {
+  .board {
+    font-size: 5rem;
+  }
+}

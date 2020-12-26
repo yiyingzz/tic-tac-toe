@@ -77,7 +77,7 @@ button {
   margin-top: 10px;
   background-color: transparent;
   border: 0;
-  color: var(--pink);
+  color: var(--pale-blue);
   font-size: 5rem;
   transform: rotate(-45deg);
 }

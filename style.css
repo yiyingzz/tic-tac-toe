@@ -66,11 +66,25 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.3s all;
 }
 
-.board .selected {
+.board .available {
+  cursor: pointer;
+}
+
+.board .available:hover {
+  background-color: var(--pale-blue);
+  opacity: 0.5;
+}
+
+.board .selected-X {
   color: var(--pink);
   /* background-color: var(--yellow); */
+}
+
+.board .selected-O {
+  color: var(--yellow);
 }
 
 button {
@@ -80,6 +94,7 @@ button {
   color: var(--pale-blue);
   font-size: 5rem;
   transform: rotate(-45deg);
+  cursor: pointer;
 }
 
 @media (max-width: 500px) {

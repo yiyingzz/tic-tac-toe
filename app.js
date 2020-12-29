@@ -59,7 +59,7 @@ const Game = (function () {
   const player2 = Player("O");
   const players = [player1, player2];
   let startingPlayer = 1; // start at 1, we flip this upon init
-  let activePlayer = 0;
+  let activePlayer;
   let hasWinner = false;
 
   const winningLines = [

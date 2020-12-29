@@ -4,6 +4,8 @@ const Gameboard = (function () {
 
   const init = () => {
     const gameboard = document.getElementById("gameboard");
+    Game.startingPlayer = Game.startingPlayer === 0 ? 1 : 0;
+    Game.activePlayer = Game.startingPlayer;
 
     for (let i = 0; i < 9; i++) {
       board.push(" ");
@@ -56,8 +58,8 @@ const Game = (function () {
   const player1 = Player("X");
   const player2 = Player("O");
   const players = [player1, player2];
-  let startingPlayer = 0;
-  let activePlayer = startingPlayer;
+  let startingPlayer = 1; // start at 1, we flip this upon init
+  let activePlayer = 0;
   let hasWinner = false;
 
   const winningLines = [

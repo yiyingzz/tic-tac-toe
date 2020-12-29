@@ -9,14 +9,15 @@ const Gameboard = (function () {
       board.push(" ");
       const cell = document.createElement("div");
       cell.setAttribute("data-id", i);
+      cell.classList.add("cell");
       cell.classList.add("available");
       gameboard.append(cell);
 
       cell.addEventListener("click", function (e) {
         if (this.classList.contains("selected")) return;
         board[e.target.dataset.id] = Game.players[Game.activePlayer].symbol;
-        this.classList.remove("available");
         this.classList.add("selected");
+        cell.classList.remove("available");
         this.classList.add(
           `selected-${Game.players[Game.activePlayer].symbol}`
         );
@@ -55,7 +56,8 @@ const Game = (function () {
   const player1 = Player("X");
   const player2 = Player("O");
   const players = [player1, player2];
-  let activePlayer = 0;
+  let startingPlayer = 0;
+  let activePlayer = startingPlayer;
   let hasWinner = false;
 
   const winningLines = [
@@ -91,7 +93,8 @@ const Game = (function () {
                     Game.players[Game.activePlayer].symbol
                   }) wins!`
                 );
-                // need to prevent clicking on empty cells!!
+                setWinningStyle(winningLines[i]);
+                disableBoard();
                 document.querySelector("button").style.display = "initial";
                 return;
               }
@@ -122,11 +125,23 @@ const Game = (function () {
     );
   };
 
-  const setWinningStyle = (symbol) => {
-    if (symbol === "X") {
-      // querySelector for winning line index --> match to data-set
-    } else {
-    }
+  const setWinningStyle = (line) => {
+    const winner = Game.players[Game.activePlayer].symbol;
+    let bgColor = "pink";
+    if (winner === "O") bgColor = "yellow";
+    const board = document.querySelectorAll(".board div");
+    line.forEach((num) => {
+      const elem = board[num];
+      elem.style.color = `var(--blue)`;
+      elem.style.backgroundColor = `var(--${bgColor})`;
+    });
+  };
+
+  const disableBoard = () => {
+    const board = document.querySelector(".board");
+    const div = document.createElement("div");
+    div.classList.add("disabled-overlay");
+    board.append(div);
   };
 
   const showMessage = (msg) => {
@@ -135,6 +150,7 @@ const Game = (function () {
   };
 
   return {
+    startingPlayer,
     activePlayer,
     players,
     checkWinner,

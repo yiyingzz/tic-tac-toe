@@ -45,6 +45,7 @@ h1 {
   max-width: 65vh;
   max-height: 65vh;
   font-size: 7rem;
+  position: relative;
 }
 
 .board::before {
@@ -54,12 +55,12 @@ h1 {
   grid-column: 1 / 1;
 }
 
-.board div:first-of-type {
+.board .cell:first-of-type {
   grid-row: 1 / 1;
   grid-column: 1 / 1;
 }
 
-.board div {
+.board .cell {
   padding: 8px;
   border-radius: 5px;
   background-color: var(--blue);
@@ -80,11 +81,20 @@ h1 {
 
 .board .selected-X {
   color: var(--pink);
-  /* background-color: var(--yellow); */
 }
 
 .board .selected-O {
   color: var(--yellow);
+}
+
+.disabled-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-color: transparent;
 }
 
 button {

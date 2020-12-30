@@ -2,10 +2,8 @@
 const Gameboard = (function () {
   const board = [];
 
-  const init = () => {
+  const renderBoard = () => {
     const gameboard = document.getElementById("gameboard");
-    Game.startingPlayer = Game.startingPlayer === 0 ? 1 : 0;
-    Game.activePlayer = Game.startingPlayer;
 
     for (let i = 0; i < 9; i++) {
       board.push(" ");
@@ -16,40 +14,14 @@ const Gameboard = (function () {
       gameboard.append(cell);
 
       cell.addEventListener("click", function (e) {
-        if (this.classList.contains("selected")) return;
-        board[e.target.dataset.id] = Game.players[Game.activePlayer].symbol;
-        this.classList.add("selected");
-        cell.classList.remove("available");
-        this.classList.add(
-          `selected-${Game.players[Game.activePlayer].symbol}`
-        );
-        this.innerText = Game.players[Game.activePlayer].symbol;
-        Game.checkWinner();
+        Game.checkResults(e.target);
       });
     }
-
-    document.querySelector("button").addEventListener("click", Gameboard.reset);
-    document.querySelector("button").style.display = "none";
-    Game.showMessage(
-      `player ${Game.activePlayer + 1} (${
-        Game.players[Game.activePlayer].symbol
-      }) starts!`
-    );
-  };
-
-  const reset = () => {
-    Game.hasWinner = false;
-    document.getElementById("gameboard").innerHTML = "";
-    for (let i = Gameboard.board.length - 1; 0 <= i; i--) {
-      Gameboard.board.pop(Gameboard.board[i]);
-    }
-    Gameboard.init();
   };
 
   return {
-    init,
-    board,
-    reset
+    renderBoard,
+    board
   };
 })();
 
@@ -58,9 +30,10 @@ const Game = (function () {
   const player1 = Player("X");
   const player2 = Player("O");
   const players = [player1, player2];
-  let startingPlayer = 1; // start at 1, we flip this upon init
-  let activePlayer;
-  let hasWinner = false;
+
+  let startingPlayer = 0;
+  let activePlayer = startingPlayer;
+  let remainingCells = 9;
 
   const winningLines = [
     [0, 1, 2],
@@ -74,61 +47,42 @@ const Game = (function () {
   ];
 
   const checkWinner = () => {
-    const indices = [];
-    Gameboard.board.forEach((cell, idx) => {
-      if (cell === Game.players[Game.activePlayer].symbol) {
-        indices.push(idx);
-      }
-    });
-    if (3 <= indices.length) {
-      for (let i = 0; i < winningLines.length; i++) {
-        let match = 0;
-        for (let j = 0; j < winningLines[i].length; j++) {
-          let num = winningLines[i][j];
-          for (let k = 0; k < indices.length; k++) {
-            if (indices[k] === num) {
-              match++;
-              if (match === 3) {
-                hasWinner = true;
-                Game.showMessage(
-                  `player ${Game.activePlayer + 1} (${
-                    Game.players[Game.activePlayer].symbol
-                  }) wins!`
-                );
-                setWinningStyle(winningLines[i]);
-                disableBoard();
-                document.querySelector("button").style.display = "initial";
-                return;
-              }
-            }
-          }
-        }
-      }
+    const board = document.querySelectorAll(".board .cell");
+    for (line of winningLines) {
+      const a = line[0];
+      const b = line[1];
+      const c = line[2];
 
-      let count = 0;
-      for (let k = 0; k < Gameboard.board.length; k++) {
-        if (Gameboard.board[k] === "X" || Gameboard.board[k] === "O") {
-          count++;
-        }
-        if (count === Gameboard.board.length) {
-          showMessage("It's a tie!");
-          document.querySelector("button").style.display = "initial";
-          return;
-        }
+      if (
+        board[a].dataset.player === players[activePlayer].symbol &&
+        board[b].dataset.player === players[activePlayer].symbol &&
+        board[c].dataset.player === players[activePlayer].symbol
+      ) {
+        showMessage(
+          `player ${activePlayer + 1} (${players[activePlayer].symbol}) wins!`
+        );
+        setWinningStyle(line);
+        disableBoard();
+        document.querySelector("button").style.display = "initial";
+        return true;
       }
     }
 
     // if no winner --> next player
-    Game.activePlayer = Game.activePlayer === 0 ? 1 : 0;
+    activePlayer = activePlayer === 0 ? 1 : 0;
     showMessage(
-      `player ${Game.activePlayer + 1} (${
-        Game.players[Game.activePlayer].symbol
-      })'s turn!`
+      `player ${activePlayer + 1} (${players[activePlayer].symbol})'s turn!`
     );
+    return false;
+  };
+
+  const declareTie = () => {
+    showMessage("It's a tie!");
+    document.querySelector("button").style.display = "initial";
   };
 
   const setWinningStyle = (line) => {
-    const winner = Game.players[Game.activePlayer].symbol;
+    const winner = players[activePlayer].symbol;
     let bgColor = "pink";
     if (winner === "O") bgColor = "yellow";
     const board = document.querySelectorAll(".board div");
@@ -137,6 +91,21 @@ const Game = (function () {
       elem.style.color = `var(--blue)`;
       elem.style.backgroundColor = `var(--${bgColor})`;
     });
+  };
+
+  const checkResults = (cell) => {
+    if (!cell.classList.contains("available")) return;
+    Gameboard.board[cell.dataset.id] = players[activePlayer].symbol;
+    cell.classList.remove("available");
+    remainingCells -= 1;
+    cell.classList.add(`selected-${players[activePlayer].symbol}`);
+    cell.dataset.player = players[activePlayer].symbol;
+    cell.innerText = players[activePlayer].symbol;
+    if (remainingCells === 0 && !checkWinner()) {
+      declareTie();
+    } else {
+      checkWinner();
+    }
   };
 
   const disableBoard = () => {
@@ -151,13 +120,29 @@ const Game = (function () {
     document.querySelector(".message").textContent = msg;
   };
 
+  const reset = () => {
+    remainingCells = 9;
+    document.getElementById("gameboard").innerHTML = "";
+    for (let i = Gameboard.board.length - 1; 0 <= i; i--) {
+      Gameboard.board.pop(Gameboard.board[i]);
+    }
+    startingPlayer = startingPlayer === 0 ? 1 : 0;
+    activePlayer = startingPlayer;
+    init();
+  };
+
+  const init = () => {
+    Gameboard.renderBoard();
+    document.querySelector("button").addEventListener("click", reset);
+    document.querySelector("button").style.display = "none";
+    showMessage(
+      `player ${activePlayer + 1} (${players[activePlayer].symbol}) starts!`
+    );
+  };
+
   return {
-    startingPlayer,
-    activePlayer,
-    players,
-    checkWinner,
-    hasWinner,
-    showMessage
+    checkResults,
+    init
   };
 })();
 
@@ -166,4 +151,4 @@ function Player(symbol) {
   return { symbol };
 }
 
-Gameboard.init();
+Game.init();

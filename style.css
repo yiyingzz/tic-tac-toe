@@ -6,6 +6,7 @@
   --dark-blue: #0667a3;
   --yellow: #f8e69e;
   --pink: #fdd1e2;
+  --border-radius: 5px;
 }
 
 * {
@@ -21,15 +22,42 @@ html {
 body {
   background-color: var(--dark-blue);
   font-family: "Fredoka One", cursive;
-  font-size: 1.8rem;
+  font-size: 2rem;
   letter-spacing: 1px;
   color: var(--pale-blue);
   text-align: center;
 }
 
+p {
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+/* global button style */
+.btn {
+  background-color: var(--blue);
+  border: 0;
+  border-radius: var(--border-radius);
+  color: var(--pale-blue);
+  cursor: pointer;
+  transition: 0.3s all;
+  display: block;
+  padding: 15px;
+  margin: 20px auto;
+  text-transform: lowercase;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.btn:hover,
+.btn:focus {
+  background-color: var(--pale-blue);
+  color: var(--blue);
+}
+
 h1 {
   margin-top: 30px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   color: var(--yellow);
   text-transform: lowercase;
   font-size: 4rem;
@@ -55,14 +83,14 @@ h1 {
   grid-column: 1 / 1;
 }
 
-.board .cell:first-of-type {
+.cell:first-of-type {
   grid-row: 1 / 1;
   grid-column: 1 / 1;
 }
 
-.board .cell {
+.cell {
   padding: 8px;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   background-color: var(--blue);
   display: flex;
   align-items: center;
@@ -70,20 +98,21 @@ h1 {
   transition: 0.3s all;
 }
 
-.board .available {
+.available {
   cursor: pointer;
 }
 
-.board .available:hover {
+.available:hover,
+.available:focus {
   background-color: var(--pale-blue);
   opacity: 0.5;
 }
 
-.board .selected-X {
+.cell[data-player="X"] {
   color: var(--pink);
 }
 
-.board .selected-O {
+.cell[data-player="O"] {
   color: var(--yellow);
 }
 
@@ -97,14 +126,31 @@ h1 {
   background-color: transparent;
 }
 
-button {
-  margin-top: 10px;
+.game-mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+}
+
+.game-mode p {
+  margin: 0;
+}
+
+.btn-change {
+  padding: 5px;
+  margin: 0;
+  margin-left: 5px;
+}
+
+.btn-reset {
+  margin-top: 8px;
   background-color: transparent;
   border: 0;
   color: var(--pale-blue);
   font-size: 5rem;
-  transform: rotate(-45deg);
   cursor: pointer;
+  transform: rotate(-45deg);
 }
 
 @media (max-width: 500px) {

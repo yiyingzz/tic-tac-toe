@@ -197,7 +197,10 @@ const Game = (function () {
     document.querySelector(".btn-solo").addEventListener("click", playSolo);
     document
       .querySelector(".btn-change")
-      .addEventListener("click", showStartScreen);
+      .addEventListener("click", function () {
+        reset();
+        showStartScreen();
+      });
     showStartScreen();
     showMessage(`Choose:`);
   };

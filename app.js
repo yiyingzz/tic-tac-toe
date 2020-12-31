@@ -103,11 +103,7 @@ const Game = (function () {
     document.querySelector(".btn-reset").style.display = "initial";
   };
 
-  const checkForWinner = (cell) => {
-    // check for winner first
-    // if winner --> run function to display winner
-    // if no winner --> check for tie
-    // if no tie --> next turn
+  const checkForWinner = () => {
     if (hasWinner()) {
       showWinner(winningLine);
     } else if (remainingCells === 0) {
@@ -146,30 +142,23 @@ const Game = (function () {
   };
 
   const computerTakesTurn = () => {
-    //switchActivePlayer();
     setTimeout(function () {
       const board = document.querySelectorAll(".board .available");
       const cell = board[Math.floor(Math.random() * board.length)];
       cell.dataset.player = players[1].symbol;
-      // THIS LINE BELOW IS CAUSING INFINITE LOOP!!!
       updateBoard(cell);
-      //checkResults(cell);
       enableBoard();
     }, 300);
   };
 
   const updateBoard = (cell) => {
     if (!cell.classList.contains("available")) return;
-    console.log(cell);
-    console.log("update board active before", activePlayer);
-    //updategameboard visually for both player & computer
     Gameboard.board[cell.dataset.id] = players[activePlayer].symbol;
     cell.classList.remove("available");
     remainingCells -= 1;
     cell.dataset.player = players[activePlayer].symbol;
     cell.innerText = players[activePlayer].symbol;
     checkForWinner(cell);
-    console.log("update board after active", activePlayer);
   };
 
   const takeTurn = () => {
@@ -181,10 +170,7 @@ const Game = (function () {
   };
 
   const switchActivePlayer = () => {
-    // switch active player
-    console.log("activebefore", activePlayer);
     activePlayer = activePlayer === 0 ? 1 : 0;
-    console.log("activeafter", activePlayer);
     showMessage(
       `${players[activePlayer].name} (${players[activePlayer].symbol})'s turn!`
     );
@@ -212,6 +198,10 @@ const Game = (function () {
     showMessage(
       `${players[activePlayer].name} (${players[activePlayer].symbol}) starts!`
     );
+    if (!pvp && activePlayer === 1) {
+      disableBoard();
+      computerTakesTurn();
+    }
   };
 
   const showStartScreen = () => {
@@ -232,6 +222,7 @@ const Game = (function () {
 
   const playPvp = () => {
     pvp = true;
+    players[1].name = "Player 2";
     document.querySelector(".game-mode p").textContent = "vs player";
     showMessage(
       `${players[activePlayer].name} (${players[activePlayer].symbol}) starts!`

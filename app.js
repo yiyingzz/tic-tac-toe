@@ -38,7 +38,7 @@ const Game = (function () {
   const player2 = Player("O", "Player 2");
   const players = [player1, player2];
 
-  let pvp = true;
+  let isPVP = true;
   let startingPlayer = 1;
   let activePlayer = startingPlayer;
   let remainingCells = 9;
@@ -154,7 +154,7 @@ const Game = (function () {
 
   const takeTurn = () => {
     switchActivePlayer();
-    if (!pvp && activePlayer === 1) {
+    if (!isPVP && activePlayer === 1) {
       disableBoard();
       computerTakesTurn();
     }
@@ -187,7 +187,7 @@ const Game = (function () {
     showMessage(
       `${players[activePlayer].name} (${players[activePlayer].symbol}) starts!`
     );
-    if (!pvp && activePlayer === 1) {
+    if (!isPVP && activePlayer === 1) {
       disableBoard();
       computerTakesTurn();
     }
@@ -206,14 +206,14 @@ const Game = (function () {
   };
 
   const playPvp = () => {
-    pvp = true;
+    isPVP = true;
     players[1].name = "Player 2";
     document.querySelector(".game-mode p").textContent = "vs player";
     hideStartScreen();
   };
 
   const playSolo = () => {
-    pvp = false;
+    isPVP = false;
     players[1].name = "Computer";
     document.querySelector(".game-mode p").textContent = "vs computer";
     hideStartScreen();

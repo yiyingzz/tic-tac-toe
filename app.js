@@ -16,13 +16,11 @@ const Gameboard = (function () {
 
       cell.addEventListener("click", function (e) {
         if (!e.target.classList.contains("available")) return;
-        //Game.checkResults(e.target);
         Game.updateBoard(e.target);
       });
       cell.addEventListener("keydown", function (e) {
         if (!e.target.classList.contains("available")) return;
         if (e.code === "Space" || e.code === "Enter")
-          //Game.checkResults(e.target);
           Game.updateBoard(e.target);
       });
     }

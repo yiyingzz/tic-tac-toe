@@ -148,7 +148,7 @@ const Game = (function () {
       cell.dataset.player = players[1].symbol;
       updateBoard(cell);
       enableBoard();
-    }, 300);
+    }, 250);
   };
 
   const updateBoard = (cell) => {
@@ -188,7 +188,6 @@ const Game = (function () {
         showStartScreen();
       });
     showStartScreen();
-    showMessage(`Choose:`);
   };
 
   const restart = () => {
@@ -205,23 +204,23 @@ const Game = (function () {
   };
 
   const showStartScreen = () => {
-    document.querySelector(".btn-pvp").style.display = "block";
-    document.querySelector(".btn-solo").style.display = "block";
-    document.querySelector(".board").style.display = "none";
-    document.querySelector(".game-mode").style.display = "none";
+    document.querySelector(".start-screen").style.display = "initial";
+    document.querySelector(".game-screen").style.display = "none";
     document.querySelector(".btn-reset").style.display = "none";
-    showMessage(`Choose:`);
   };
 
   const hideStartScreen = () => {
-    document.querySelector(".btn-pvp").style.display = "none";
-    document.querySelector(".btn-solo").style.display = "none";
-    document.querySelector(".board").style.display = "grid";
-    document.querySelector(".game-mode").style.display = "flex";
+    document.querySelector(".start-screen").style.display = "none";
+    document.querySelector(".game-screen").style.display = "initial";
+    if (!pvp && activePlayer === 1) {
+      disableBoard();
+      computerTakesTurn();
+    }
   };
 
   const playPvp = () => {
     pvp = true;
+    activePlayer = 0;
     players[1].name = "Player 2";
     document.querySelector(".game-mode p").textContent = "vs player";
     showMessage(
@@ -232,6 +231,7 @@ const Game = (function () {
 
   const playSolo = () => {
     pvp = false;
+    activePlayer = 0;
     players[1].name = "Computer";
     document.querySelector(".game-mode p").textContent = "vs computer";
     showMessage(

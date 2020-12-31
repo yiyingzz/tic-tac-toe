@@ -12,25 +12,28 @@
   </head>
   <body>
     <h1>Tic-Tac-Toe</h1>
-
-    <div class="game-mode">
-      <p class="msg-game-mode"></p>
-      <button class="btn btn-change">Change</button>
+    <div class="start-screen">
+      <p class="choose">Choose:</p>
+      <button class="btn btn-pvp">Player vs Player</button>
+      <button class="btn btn-solo">Player vs Computer</button>
     </div>
 
-    <p class="message"></p>
+    <div class="game-screen">
+      <div class="game-mode">
+        <p class="msg-game-mode"></p>
+        <button class="btn btn-change">Change</button>
+      </div>
 
-    <button class="btn btn-pvp">Player vs Player</button>
-    <button class="btn btn-solo">Player vs Computer</button>
+      <p class="message"></p>
+      <div id="gameboard" class="board">
+        <!-- js will populate this -->
+      </div>
 
-    <div id="gameboard" class="board">
-      <!-- js will populate this -->
+      <button class="btn-reset">
+        <i class="fas fa-undo-alt" aria-hidden="true"></i
+        ><span class="sr-only">Play again</span>
+      </button>
     </div>
-
-    <button class="btn-reset">
-      <i class="fas fa-undo-alt" aria-hidden="true"></i
-      ><span class="sr-only">Play again</span>
-    </button>
 
     <script src="./app.js"></script>
   </body>

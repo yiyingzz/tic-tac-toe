@@ -63,6 +63,10 @@ h1 {
   font-size: 4rem;
 }
 
+.start-screen {
+  text-transform: lowercase;
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(3, minmax(50px, 1fr));

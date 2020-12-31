@@ -41,7 +41,7 @@ const Game = (function () {
   const players = [player1, player2];
 
   let pvp = true;
-  let startingPlayer = 0;
+  let startingPlayer = 1;
   let activePlayer = startingPlayer;
   let remainingCells = 9;
   let winningLine;
@@ -69,17 +69,10 @@ const Game = (function () {
         board[b].dataset.player === players[activePlayer].symbol &&
         board[c].dataset.player === players[activePlayer].symbol
       ) {
-        // showMessage(
-        //   `${players[activePlayer].name} (${players[activePlayer].symbol}) wins!`
-        // );
-        // setWinningStyle(line);
-        // disableBoard();
-        // document.querySelector(".btn-reset").style.display = "initial";
         winningLine = line;
         return true;
       }
     }
-
     return false;
   };
 
@@ -162,11 +155,11 @@ const Game = (function () {
   };
 
   const takeTurn = () => {
-    if (!pvp && activePlayer === 0) {
+    switchActivePlayer();
+    if (!pvp && activePlayer === 1) {
       disableBoard();
       computerTakesTurn();
     }
-    switchActivePlayer();
   };
 
   const switchActivePlayer = () => {
@@ -184,7 +177,6 @@ const Game = (function () {
     document
       .querySelector(".btn-change")
       .addEventListener("click", function () {
-        reset();
         showStartScreen();
       });
     showStartScreen();
@@ -212,36 +204,24 @@ const Game = (function () {
   const hideStartScreen = () => {
     document.querySelector(".start-screen").style.display = "none";
     document.querySelector(".game-screen").style.display = "initial";
-    if (!pvp && activePlayer === 1) {
-      disableBoard();
-      computerTakesTurn();
-    }
+    reset();
   };
 
   const playPvp = () => {
     pvp = true;
-    activePlayer = 0;
     players[1].name = "Player 2";
     document.querySelector(".game-mode p").textContent = "vs player";
-    showMessage(
-      `${players[activePlayer].name} (${players[activePlayer].symbol}) starts!`
-    );
     hideStartScreen();
   };
 
   const playSolo = () => {
     pvp = false;
-    activePlayer = 0;
     players[1].name = "Computer";
     document.querySelector(".game-mode p").textContent = "vs computer";
-    showMessage(
-      `${players[activePlayer].name} (${players[activePlayer].symbol}) starts!`
-    );
     hideStartScreen();
   };
 
   return {
-    checkForWinner,
     updateBoard,
     init
   };
